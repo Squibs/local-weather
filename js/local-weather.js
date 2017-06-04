@@ -27,8 +27,24 @@ console.log(x.innerHTML);
 console.log('hello?');
 */
 
+const callAPI = function (lat, lon) {
+  const apiURL = `https://api.openweathermap.org/data/2.5/weather?lat={${lat}}&lon={${lon}}`;
+
+  // TODO: remove this console log
+  console.log(apiURL);
+
+  $.ajax({
+    url: 'api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}',
+    data:,
+    success: 
+  });
+};
+
 const showPosition = function (position) {
   document.write(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  callAPI(lat, lon);
 };
 
 const showError = function (error) {
