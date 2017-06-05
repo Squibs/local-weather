@@ -1,8 +1,4 @@
-const apiError = function (textStatus, errorThrown) {
-  alert(`Error: ${textStatus}<br><br>Thrown: ${errorThrown}`);
-};
-
-const apiSuccess = function (data) {
+function apiSuccess(data) {
   let currentTimeUnix = '';
   let sunriseTimeUnix = '';
   let sunsetTimeUnix = '';
@@ -230,23 +226,16 @@ const apiSuccess = function (data) {
       break;
   }
 
-  console.log(`Weather: ${weatherIcon}, Favicon: ${faviconIcon}`);
-};
+  document.write(`<br><br>Weather: ${weatherIcon}, Favicon: ${faviconIcon}`);
+  document.write(`<img src=${weatherIcon} alt="weather icon" height="42" width="42"/>`);
+}
 
 const callAPI = function (lat, lon) {
-  const apiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&APPID=7451b0f38a2562bb3050c05a3c01282b`;
+  const apiURL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&APPID=7451b0f38a2562bb3050c05a3c01282b`;
 
   console.log(apiURL);
 
-  apiSuccess();
-
-  $.ajax({
-    url: 'api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}',
-    headers: { 'Cache-Control': 'max-age=600' },
-    success: apiSuccess(),
-    error: apiError(),
-    cache: true,
-  });
+  $.getJSON(apiURL, (data) => { apiSuccess(data); });
 };
 
 const showPosition = function (position) {
