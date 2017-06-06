@@ -1,182 +1,130 @@
-const apiSuccess = function (data, textStatus, jqXHR) {
-  console.log('Success');
+/* eslint no-alert: 0 */
 
-  let currentTimeHour = '';
-  let sunriseTimeHour = '';
-  let sunsetTimeHour = '';
+/* dynamic favicon - cannot figure out a way to get this to work on any browser;
+*  leaving this here for the future
+*/
+/*
+document.head = document.head || (document.head = document.getElementsByTagName('head')[0]);
+
+const changeFavicon = function (imgLink) {
+  const favLink = document.createElement('link');
+  const oldFav = document.getElementById('dynamic-favicon');
+  let imgLoc = imgLink.replace('svg', 'png');
+
+  imgLoc = imgLoc.replace('svg', 'png');
+  imgLoc = `${imgLoc}?=${Math.random()}`;
+
+  console.log(imgLoc);
+
+  favLink.id = 'dynamic-favicon';
+  favLink.rel = 'shortcut icon';
+  favLink.href = imgLoc;
+
+  if (oldFav) {
+    document.head.removeChild(oldFav);
+  }
+
+  document.head.appendChild(favLink);
+};
+*/
+
+const apiSuccess = function (data) {
+  const currentTime = new Date(data.currently.time * 1000);
+  const sunriseTime = new Date(data.daily.data[0].sunriseTime * 1000);
+  const sunsetTime = new Date(data.daily.data[0].sunsetTime * 1000);
   let weatherIcon = '';
-
-  // FIXME: remove this; for visual reference
-  document.write(`<br><br>${JSON.stringify(data)}`);
-
-  currentTimeHour = new Date(data.currently.time * 1000);
-  sunriseTimeHour = new Date(data.daily.data[0].sunriseTime * 1000);
-  sunsetTimeHour = new Date(data.daily.data[0].sunsetTime * 1000);
-
-  console.log(`Current: ${currentTimeHour}, Sunrise: ${sunriseTimeHour}, Sunset: ${sunsetTimeHour}`);
-  console.log(data.weather[0].id);
 
   // weather types
   switch (true) {
-    // thunderstorm
-    case (data.weather[0].id >= 200 && data.weather[0].id <= 232):
-      if (data.clouds.all > 75) {
-        if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-clouds-flash.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-clouds-flash-inv.svg'; }
-      } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-cloud-flash.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-cloud-flash-inv.svg'; }
-      break;
-
-    // drizzle
-    case (data.weather[0].id >= 300 && data.weather[0].id <= 321):
-      if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-drizzle.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-drizzle-inv.svg'; }
+    // clear-day or clear-night
+    case (data.currently.icon === 'clear-day' || data.currently.icon === 'clear-night'):
+      if (currentTime > sunriseTime && currentTime < sunsetTime) {
+        weatherIcon = '/img/meteocons/svg/icon-sun.svg';
+      } else { weatherIcon = '/img/meteocons/svg/icon-moon-inv.svg'; }
       break;
 
     // rain
-    case (data.weather[0].id >= 500 && data.weather[0].id <= 531):
-      if (data.wind.speed >= 10.8) {
-        if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-windy-rain.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-windy-rain-inv.svg'; }
-      } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-rain.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-rain-inv.svg'; }
+    case (data.currently.icon === 'rain'):
+      if (data.currently.windSpeed >= 32) {
+        if (currentTime > sunriseTime && currentTime < sunsetTime) {
+          weatherIcon = '/img/meteocons/svg/icon-windy-rain.svg';
+        } else { weatherIcon = '/img/meteocons/svg/icon-windy-rain-inv.svg'; }
+      } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
+        weatherIcon = '/img/meteocons/svg/icon-rain.svg';
+      } else { weatherIcon = '/img/meteocons/svg/icon-rain-inv.svg'; }
       break;
 
-    // snow
-    case (data.weather[0].id >= 600 && data.weather[0].id <= 622):
-      if (data.weather[0].id === 602 || data.weather[0].id === 622) {
-        if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-snow-heavy.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-snow-heavy-inv.svg'; }
-      } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-snow.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-snow-inv.svg'; }
+    // snow or sleet
+    case (data.currently.icon === 'snow' || data.currently.icon === 'sleet'):
+      if (data.daily.precipIntensityMax > 3.5) {
+        if (currentTime > sunriseTime && currentTime < sunsetTime) {
+          weatherIcon = '/img/meteocons/svg/icon-snow-heavy.svg';
+        } else { weatherIcon = '/img/meteocons/svg/icon-snow-heavy-inv.svg'; }
+      } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
+        weatherIcon = '/img/meteocons/svg/icon-snow.svg';
+      } else { weatherIcon = '/img/meteocons/svg/icon-snow-inv.svg'; }
       break;
 
-    // atmosphere
-    case (data.weather[0].id >= 701 && data.weather[0].id <= 781):
-      if (data.weather[0].id === 741) {
-        if (data.clouds.all > 74) {
-          weatherIcon = 'img/meteocons/svg/icon-fog-cloud.svg';
-        } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-fog-sun.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-fog-moon.svg'; }
-      } else if (data.weather[0].id === 701) {
-        weatherIcon = 'img/meteocons/svg/icon-mist.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-fog.svg'; }
+    // wind
+    case (data.currently.icon === 'wind'):
+      weatherIcon = '/img/meteocons/svg/icon-wind.svg';
       break;
 
-    // clear
-    case (data.weather[0].id === 800):
-      if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-sun.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-moon.svg'; }
+    // fog
+    case (data.currently.icon === 'fog'):
+      if (data.currently.cloudCover > 0.55) {
+        weatherIcon = '/img/meteocons/svg/icon-fog-cloud.svg';
+      } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
+        weatherIcon = '/img/meteocons/svg/icon-fog-sun.svg';
+      } else { weatherIcon = '/img/meteocons/svg/icon-fog-moon.svg'; }
       break;
 
-    // clouds
-    case (data.weather[0].id >= 801 && data.weather[0].id <= 804):
-      if (data.clouds.all > 48) {
-        if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-clouds.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-clouds-inv.svg'; }
-      } else if (data.clouds.all <= 48 && data.clouds.all > 24) {
-        if (data.wind.speed >= 10.8) {
-          if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-            weatherIcon = 'img/meteocons/svg/icon-windy.svg';
-          } else { weatherIcon = 'img/meteocons/svg/icon-windy-inv.svg'; }
-        } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-          weatherIcon = 'img/meteocons/svg/icon-cloud.svg';
-        } else { weatherIcon = 'img/meteocons/svg/icon-cloud-inv.svg'; }
-      } else if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-        weatherIcon = 'img/meteocons/svg/icon-cloud-sun.svg';
-      } else { weatherIcon = 'img/meteocons/svg/icon-cloud-moon.svg'; }
-      break;
-
-    // extreme
-    case (data.weather[0].id >= 900 && data.weather[0].id <= 906):
-      switch (data.weather[0].id) {
-        // tornado
-        case 900:
-          weatherIcon = 'img/icon-tornado.svg';
-          break;
-
-        // tropical storm
-        case 901:
-          weatherIcon = 'img/icon-tropical-storm.svg';
-          break;
-
-        // hurricane
-        case 902:
-          weatherIcon = 'img/icon-hurricane.svg';
-          break;
-
-        // cold
-        case 903:
-          weatherIcon = 'img/meteocons/svg/icon-temperature.svg';
-          break;
-
-        // hot
-        case 904:
-          weatherIcon = 'img/meteocons/svg/icon-temperature.svg';
-          break;
-
-        // windy
-        case 905:
-          weatherIcon = 'img/meteocons/svg/icon-wind.svg';
-          break;
-
-        // hail
-        case 906:
-          if (currentTimeHour >= sunriseTimeHour && currentTimeHour <= sunsetTimeHour) {
-            weatherIcon = 'img/meteocons/svg/icon-hail.svg';
-          } else { weatherIcon = 'img/meteocons/svg/icon-hail-inv.svg'; }
-          break;
-
-        // default
-        default:
-          break;
-      }
+    // cloudy, partly-cloudy-day, or partly-cloudy-night
+    case (data.currently.icon === 'cloudy' || data.currently.icon === 'partly-cloudy-day' || data.currently.icon === 'partly-cloudy-night'):
+      if (data.currently.cloudCover > 0.69) {
+        if (currentTime > sunriseTime && currentTime < sunsetTime) {
+          weatherIcon = '/img/meteocons/svg/icon-clouds.png';
+        } else { weatherIcon = '/img/meteocons/svg/icon-clouds-inv.svg'; }
+      } else if (data.currently.cloudCover <= 0.69 && data.currently.cloudCover > 51) {
+        if (data.currently.windSpeed >= 25) {
+          if (currentTime > sunriseTime && currentTime < sunsetTime) {
+            weatherIcon = '/img/meteocons/svg/icon-windy.svg';
+          } else { weatherIcon = '/img/meteocons/svg/icon-windy-inv.svg'; }
+        } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
+          weatherIcon = '/img/meteocons/svg/icon-cloud.svg';
+        } else { weatherIcon = '/img/meteocons/svg/icon-cloud-inv.svg'; }
+      } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
+        weatherIcon = '/img/meteocons/svg/icon-cloud-sun.svg';
+      } else { weatherIcon = '/img/meteocons/svg/icon-cloud-moon-inv.svg'; }
       break;
 
     // default
     default:
-      weatherIcon = 'img/icon-question-mark.svg';
+      weatherIcon = '/img/icon-question-mark.svg';
       break;
   }
-
-  document.write(`<br><br>Weather: ${weatherIcon}`);
-  document.write(`<img src=${weatherIcon} alt="weather icon" height="42" width="42"/>`);
 };
 
-const apiError = function (jqXHR, textStatus, errorThrown) {
+const apiError = function (textStatus, errorThrown) {
   alert(`Status: ${textStatus}\nError: ${errorThrown}`);
 };
 
 const getData = function (apiURL) {
   return $.ajax({
-    url: apiURL,
-    type: 'GET',
+    format: 'jsonp',
+    dataType: 'jsonp',
     headers: { 'Cache-Control': 'max-age=600' },
     cache: true,
+    url: apiURL,
   });
 };
 
 const callAPI = function (lat, lon) {
   const apiURL = `https://api.darksky.net/forecast/d8dfa4936dd40016ba877875ed576b46/${lat},${lon}`;
-
-  console.log(apiURL);
-
   getData(apiURL).done(apiSuccess).fail(apiError);
 };
 
 const showPosition = function (position) {
-  // FIXME: remove this; for visual reference
-  document.write(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
   callAPI(lat, lon);
