@@ -133,9 +133,6 @@ const setCity = function (data) {
 };
 
 const apiSuccess = function (data) {
-  const ip = $.getJSON('http://jsonip.com/?callback=?');
-  console.log(ip);
-
   getCityAPI().done(setCity);
   setWeatherIcon(data);
   setWeatherInfo(data);
