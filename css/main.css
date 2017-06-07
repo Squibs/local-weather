@@ -42,6 +42,7 @@ body { margin: 0; }
     font-size: 1.5em;
     text-align: center;
     margin-bottom: -20px;
+    max-width: 500px;
 }
 
 #weatherInfoLater {
