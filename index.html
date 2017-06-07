@@ -3,10 +3,55 @@
 <head>
 	<title>Local Weather</title>
 
-	<link id="dynamic-favicon" rel="shortcut icon" href="/img/meteocons/png/icon-question-mark.png"/>
+	<link class="dynamic-favicon" rel="shortcut icon" href="/img/meteocons/png/icon-tropical-storm.png"/>
+	<link rel="stylesheet" type="text/css" href="/css/main.css"/>
 </head>
+
 <body>
-	<h1>Hello World!</h1>
+	<div class="container">
+		<div class="weatherContainer">
+			<div id="cityName"></div>
+			<div class="mainStats">
+				<div id="weatherIcon"></div>
+				<div id="weatherInfo"></div>
+				<div id="weatherInfoLater"></div>
+			</div>
+			<div class="otherStats">
+				<div>
+					<div class="stat">
+						<img src="/img/meteocons/svg/icon-temperature.svg" alt="Image of a thermometer." height="42" width="42"/>
+						<h3 id="temperature"></h3>
+						<h4 class="changeTemp">&#8457;</h4>
+						<p>Temperature</p>
+					</div>
+					<div class="stat">
+						<img src="/img/meteocons/svg/icon-wind.svg" alt="Image of a thermometer." height="42" width="42"/>
+						<h3 id="windSpeed"></h3>
+						<h4 class="speed">MPH</h4>
+						<p>Wind Speed</p>
+					</div>
+				</div>
+				<div>
+					<div class="stat">
+						<img src="/img/meteocons/svg/icon-humidity.svg" alt="Image of a thermometer." height="42" width="42"/>
+						<h3 id="humidity"></h3>
+						<h4 id="percent">%</h4>
+						<p>Humidity</p>
+					</div>
+					<div class="stat">
+						<img src="/img/meteocons/svg/icon-cloud.svg" alt="Image of a thermometer." height="42" width="42"/>
+						<h3 id="cloudCover"></h3>
+						<h4 id="percent">%</h4>
+						<p>Cloud Coverage</p>
+					</div>
+				</div>
+			</div>
+			<div>
+				<button class="button">Switch to Celsius</button>
+			</div>
+		</div>
+	</div>
+
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 	<script src="js/local-weather.js"></script>
 </body>

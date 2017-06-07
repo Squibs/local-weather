@@ -8,7 +8,7 @@ document.head = document.head || (document.head = document.getElementsByTagName(
 
 const changeFavicon = function (imgLink) {
   const favLink = document.createElement('link');
-  const oldFav = document.getElementById('dynamic-favicon');
+  const oldFav = document.getElementByClassName('dynamic-favicon');
   let imgLoc = imgLink.replace('svg', 'png');
 
   imgLoc = imgLoc.replace('svg', 'png');
@@ -16,19 +16,17 @@ const changeFavicon = function (imgLink) {
 
   console.log(imgLoc);
 
-  favLink.id = 'dynamic-favicon';
+  favLink.class = 'dynamic-favicon';
   favLink.rel = 'shortcut icon';
   favLink.href = imgLoc;
 
-  if (oldFav) {
-    document.head.removeChild(oldFav);
-  }
+  if (oldFav) { document.head.removeChild(oldFav); }
 
   document.head.appendChild(favLink);
 };
 */
 
-const apiSuccess = function (data) {
+const setWeatherIcon = function (data) {
   const currentTime = new Date(data.currently.time * 1000);
   const sunriseTime = new Date(data.daily.data[0].sunriseTime * 1000);
   const sunsetTime = new Date(data.daily.data[0].sunsetTime * 1000);
@@ -83,7 +81,7 @@ const apiSuccess = function (data) {
     case (data.currently.icon === 'cloudy' || data.currently.icon === 'partly-cloudy-day' || data.currently.icon === 'partly-cloudy-night'):
       if (data.currently.cloudCover > 0.69) {
         if (currentTime > sunriseTime && currentTime < sunsetTime) {
-          weatherIcon = '/img/meteocons/svg/icon-clouds.png';
+          weatherIcon = '/img/meteocons/svg/icon-clouds.svg';
         } else { weatherIcon = '/img/meteocons/svg/icon-clouds-inv.svg'; }
       } else if (data.currently.cloudCover <= 0.69 && data.currently.cloudCover > 51) {
         if (data.currently.windSpeed >= 25) {
@@ -100,9 +98,45 @@ const apiSuccess = function (data) {
 
     // default
     default:
-      weatherIcon = '/img/icon-question-mark.svg';
+      weatherIcon = '/img/icon-na.svg';
       break;
   }
+
+  $('#weatherIcon').html(`<img src="${weatherIcon}" alt="Icon displayed based on the current weather." height="42" width="42"/>`);
+};
+
+const setWeatherInfo = function (data) {
+  $('#weatherInfo').html(`<p>${data.minutely.summary}</p>`);
+  $('#weatherInfoLater').html(`<p>${data.hourly.summary}</p>`);
+};
+
+const setOtherStats = function (data) {
+  $('#temperature').html(Math.round(data.currently.temperature * 100) / 100);
+  $('#windSpeed').html(Math.round(data.currently.windSpeed * 100) / 100);
+  $('#humidity').html(data.currently.humidity * 100);
+  $('#cloudCover').html(data.currently.cloudCover * 100);
+};
+
+const getCityAPI = function () {
+  return $.ajax({
+    format: 'jsonp',
+    dataType: 'jsonp',
+    headers: { 'Cache-Control': 'max-age=600' },
+    cache: true,
+    url: 'https://ipinfo.io/json',
+  });
+};
+
+const setCity = function (data) {
+  const cityData = `${data.city}, ${data.region}`;
+  $('#cityName').html(`<h1>${cityData}</h1>`);
+};
+
+const apiSuccess = function (data) {
+  getCityAPI().done(setCity);
+  setWeatherIcon(data);
+  setWeatherInfo(data);
+  setOtherStats(data);
 };
 
 const apiError = function (textStatus, errorThrown) {
@@ -163,5 +197,42 @@ const getLocation = function () {
     alert('Geolocation is not supported in your browser. Sorry!');
   }
 };
+
+let toggle = false;
+
+$('.button').click(() => {
+  let currentTemp = $('#temperature').html();
+  let currentSpeed = $('#windSpeed').html();
+
+  if (currentTemp === '' || currentTemp === ' ') {
+    toggle = false;
+  } else if (toggle === false) {
+    currentTemp = (currentTemp - 32) / (9 / 5);
+    currentTemp = Math.round(currentTemp * 100) / 100;
+    $('#temperature').html(currentTemp);
+    $('.changeTemp').html('&#8451;');
+
+    currentSpeed *= 1.609344;
+    currentSpeed = Math.round(currentSpeed * 100) / 100;
+    $('#windSpeed').html(currentSpeed);
+    $('.speed').html('KM/H');
+
+    $('.button').html('Switch to Fahrenheit');
+    toggle = true;
+  } else {
+    currentTemp = (currentTemp * (9 / 5)) + 32;
+    currentTemp = Math.round(currentTemp * 100) / 100;
+    $('#temperature').html(currentTemp);
+    $('.changeTemp').html('&#8457;');
+
+    currentSpeed /= 1.609344;
+    currentSpeed = Math.round(currentSpeed * 100) / 100;
+    $('#windSpeed').html(currentSpeed);
+    $('.speed').html('MPH');
+
+    $('.button').html('Switch to Celsius');
+    toggle = false;
+  }
+});
 
 $(document).ready(getLocation());
