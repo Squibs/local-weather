@@ -12,7 +12,4 @@ A local weather app I have created while going through the intermediate front en
 
 The second intermediate front end development project I completed while completing lessons on freeCodeCamp. For this project I retrieved the information displayed from the [Dark Sky API](https://darksky.net/dev/docs/forecast). I made the site request for the user's current location to retrieve the current geolocation coordinates and retrieve the relevant local weather with those coordinates using the API. I used the built in CSS flexbox for this app instead of BootStrap to try out something new (see my flexbox notes in the project files). A button to switch between Celsius and Fahrenheit is also included.
 
-<img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/1bdd9917/img/icon-html5.svg" height="40" alt="HTML5 Icon"/>   
-<img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/1bdd9917/img/icon-css3.svg" height="40" alt="CSS3 Icon"/>   
-<img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/master/img/icon-jquery.svg" height="40" alt="jQuery Icon"/>   
-<img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/master/img/icon-javascript.svg" height="40" alt="JavaScript Icon"/>
+<img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/1bdd9917/img/icon-html5.svg" height="40" alt="HTML5 Icon"/>   <img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/1bdd9917/img/icon-css3.svg" height="40" alt="CSS3 Icon"/>   <img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/master/img/icon-jquery.svg" height="40" alt="jQuery Icon"/>   <img src="https://cdn.rawgit.com/Squibs/Squibs.github.io/master/img/icon-javascript.svg" height="40" alt="JavaScript Icon"/>
