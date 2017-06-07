@@ -113,8 +113,8 @@ const setWeatherInfo = function (data) {
 const setOtherStats = function (data) {
   $('#temperature').html(Math.round(data.currently.temperature * 100) / 100);
   $('#windSpeed').html(Math.round(data.currently.windSpeed * 100) / 100);
-  $('#humidity').html(data.currently.humidity * 100);
-  $('#cloudCover').html(data.currently.cloudCover * 100);
+  $('#humidity').html(Math.round(data.currently.humidity * 100));
+  $('#cloudCover').html(Math.round(data.currently.cloudCover * 100));
 };
 
 const getCityAPI = function () {
@@ -133,6 +133,9 @@ const setCity = function (data) {
 };
 
 const apiSuccess = function (data) {
+  const ip = $.getJSON('http://jsonip.com/?callback=?');
+  console.log(ip);
+
   getCityAPI().done(setCity);
   setWeatherIcon(data);
   setWeatherInfo(data);
