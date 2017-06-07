@@ -100,3 +100,8 @@ body { margin: 0; }
     background-color: #eee;
     color: #02c39a;
 }
+
+.poweredBy {
+    width: 100%;
+    text-align: center;
+}
