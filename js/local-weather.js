@@ -37,68 +37,68 @@ const setWeatherIcon = function (data) {
     // clear-day or clear-night
     case (data.currently.icon === 'clear-day' || data.currently.icon === 'clear-night'):
       if (currentTime > sunriseTime && currentTime < sunsetTime) {
-        weatherIcon = '/img/meteocons/svg/icon-sun.svg';
-      } else { weatherIcon = '/img/meteocons/svg/icon-moon-inv.svg'; }
+        weatherIcon = 'img/meteocons/svg/icon-sun.svg';
+      } else { weatherIcon = 'img/meteocons/svg/icon-moon-inv.svg'; }
       break;
 
     // rain
     case (data.currently.icon === 'rain'):
       if (data.currently.windSpeed >= 32) {
         if (currentTime > sunriseTime && currentTime < sunsetTime) {
-          weatherIcon = '/img/meteocons/svg/icon-windy-rain.svg';
-        } else { weatherIcon = '/img/meteocons/svg/icon-windy-rain-inv.svg'; }
+          weatherIcon = 'img/meteocons/svg/icon-windy-rain.svg';
+        } else { weatherIcon = 'img/meteocons/svg/icon-windy-rain-inv.svg'; }
       } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
-        weatherIcon = '/img/meteocons/svg/icon-rain.svg';
-      } else { weatherIcon = '/img/meteocons/svg/icon-rain-inv.svg'; }
+        weatherIcon = 'img/meteocons/svg/icon-rain.svg';
+      } else { weatherIcon = 'img/meteocons/svg/icon-rain-inv.svg'; }
       break;
 
     // snow or sleet
     case (data.currently.icon === 'snow' || data.currently.icon === 'sleet'):
       if (data.daily.precipIntensityMax > 3.5) {
         if (currentTime > sunriseTime && currentTime < sunsetTime) {
-          weatherIcon = '/img/meteocons/svg/icon-snow-heavy.svg';
-        } else { weatherIcon = '/img/meteocons/svg/icon-snow-heavy-inv.svg'; }
+          weatherIcon = 'img/meteocons/svg/icon-snow-heavy.svg';
+        } else { weatherIcon = 'img/meteocons/svg/icon-snow-heavy-inv.svg'; }
       } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
-        weatherIcon = '/img/meteocons/svg/icon-snow.svg';
-      } else { weatherIcon = '/img/meteocons/svg/icon-snow-inv.svg'; }
+        weatherIcon = 'img/meteocons/svg/icon-snow.svg';
+      } else { weatherIcon = 'img/meteocons/svg/icon-snow-inv.svg'; }
       break;
 
     // wind
     case (data.currently.icon === 'wind'):
-      weatherIcon = '/img/meteocons/svg/icon-wind.svg';
+      weatherIcon = 'img/meteocons/svg/icon-wind.svg';
       break;
 
     // fog
     case (data.currently.icon === 'fog'):
       if (data.currently.cloudCover > 0.55) {
-        weatherIcon = '/img/meteocons/svg/icon-fog-cloud.svg';
+        weatherIcon = 'img/meteocons/svg/icon-fog-cloud.svg';
       } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
-        weatherIcon = '/img/meteocons/svg/icon-fog-sun.svg';
-      } else { weatherIcon = '/img/meteocons/svg/icon-fog-moon.svg'; }
+        weatherIcon = 'img/meteocons/svg/icon-fog-sun.svg';
+      } else { weatherIcon = 'img/meteocons/svg/icon-fog-moon.svg'; }
       break;
 
     // cloudy, partly-cloudy-day, or partly-cloudy-night
     case (data.currently.icon === 'cloudy' || data.currently.icon === 'partly-cloudy-day' || data.currently.icon === 'partly-cloudy-night'):
       if (data.currently.cloudCover > 0.69) {
         if (currentTime > sunriseTime && currentTime < sunsetTime) {
-          weatherIcon = '/img/meteocons/svg/icon-clouds.svg';
-        } else { weatherIcon = '/img/meteocons/svg/icon-clouds-inv.svg'; }
+          weatherIcon = 'img/meteocons/svg/icon-clouds.svg';
+        } else { weatherIcon = 'img/meteocons/svg/icon-clouds-inv.svg'; }
       } else if (data.currently.cloudCover <= 0.69 && data.currently.cloudCover > 51) {
         if (data.currently.windSpeed >= 25) {
           if (currentTime > sunriseTime && currentTime < sunsetTime) {
-            weatherIcon = '/img/meteocons/svg/icon-windy.svg';
-          } else { weatherIcon = '/img/meteocons/svg/icon-windy-inv.svg'; }
+            weatherIcon = 'img/meteocons/svg/icon-windy.svg';
+          } else { weatherIcon = 'img/meteocons/svg/icon-windy-inv.svg'; }
         } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
-          weatherIcon = '/img/meteocons/svg/icon-cloud.svg';
-        } else { weatherIcon = '/img/meteocons/svg/icon-cloud-inv.svg'; }
+          weatherIcon = 'img/meteocons/svg/icon-cloud.svg';
+        } else { weatherIcon = 'img/meteocons/svg/icon-cloud-inv.svg'; }
       } else if (currentTime > sunriseTime && currentTime < sunsetTime) {
-        weatherIcon = '/img/meteocons/svg/icon-cloud-sun.svg';
-      } else { weatherIcon = '/img/meteocons/svg/icon-cloud-moon-inv.svg'; }
+        weatherIcon = 'img/meteocons/svg/icon-cloud-sun.svg';
+      } else { weatherIcon = 'img/meteocons/svg/icon-cloud-moon-inv.svg'; }
       break;
 
     // default
     default:
-      weatherIcon = '/img/icon-na.svg';
+      weatherIcon = 'img/icon-na.svg';
       break;
   }
 
