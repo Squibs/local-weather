@@ -1,4 +1,5 @@
 /* eslint no-alert: 0 */
+/* eslint no-console: 0 */
 
 /* dynamic favicon - cannot figure out a way to get this to work on any browser;
 *  leaving this here for the future
@@ -25,6 +26,8 @@ const changeFavicon = function (imgLink) {
   document.head.appendChild(favLink);
 };
 */
+
+let backup = 'no';
 
 const setWeatherIcon = function (data) {
   const currentTime = new Date(data.currently.time * 1000);
@@ -153,24 +156,43 @@ const getData = function (apiURL) {
   });
 };
 
-const callAPI = function (lat, lon) {
-  const apiURL = `https://api.darksky.net/forecast/d8dfa4936dd40016ba877875ed576b46/${lat},${lon}`;
+const callAPI = function (lat, lon, loc) {
+  let apiURL = '';
+
+  if (loc !== null) {
+    apiURL = `https://api.darksky.net/forecast/d8dfa4936dd40016ba877875ed576b46/${loc}`;
+  } else {
+    apiURL = `https://api.darksky.net/forecast/d8dfa4936dd40016ba877875ed576b46/${lat},${lon}`;
+  }
   getData(apiURL).done(apiSuccess).fail(apiError);
 };
 
 const showPosition = function (position) {
   const lat = position.coords.latitude;
   const lon = position.coords.longitude;
-  callAPI(lat, lon);
+  callAPI(lat, lon, null);
+};
+
+const getBackupLocation = function (data) {
+  const loc = data.loc;
+  callAPI(null, null, loc);
+};
+
+const backupAPI = function () {
+  if (backup === 'yes') {
+    getCityAPI().done(getBackupLocation);
+  }
 };
 
 const showError = function (error) {
+  backup = 'yes';
+
   switch (error.code) {
     case error.PERMISSION_DENIED:
-      alert('User denied the request for Geolocation.');
+      console.log('User denied the request for Geolocation.');
       break;
     case error.POSITION_UNAVAILABLE:
-      alert('Location information is unavailable.');
+      console.log('User denied location request or location information is unavailable; now using relative location.');
       break;
     case error.TIMEOUT:
       alert('The request to get user location timed out.');
@@ -182,6 +204,8 @@ const showError = function (error) {
       alert('Potentially not an error');
       break;
   }
+
+  backupAPI();
 };
 
 const getLocation = function () {
