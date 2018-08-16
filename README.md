@@ -1,8 +1,8 @@
 # Local Weather
 
-A local weather app I have created while going through the intermediate front end development projects at https://freeCodeCamp.com.
+A local weather app I have created while going through the intermediate front end development projects at www.freeCodeCamp.org.
 
-## [Front End Development Projects](https://github.com/Squibs/freeCodeCamp/tree/master/Front%20End%20Development%20Certification#local-weather) (Go Back)
+## [Front End Development Projects](https://github.com/Squibs/freeCodeCamp#freecodecamp) (Go Back to My freeCodeCamp Repository)
 
 <a href="https://squibs.github.io/local-weather/" target="_blank"><img src="img/screenshot-local-weather.png" height="600" alt="Screenshot of my local weather project / website"/></a>
 
